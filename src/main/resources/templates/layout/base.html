@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html
+        lang="pl" xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">SignalBus</title>
+
+    <link rel="stylesheet" th:href="@{/web/css/const.css}">
+    <link rel="stylesheet" th:href="@{/web/css/base.css}">
+
+</head>
+<body>
+
+<header layout:fragment="header-content">
+</header>
+
+<main layout:fragment="main-content">
+</main>
+
+<footer layout:fragment="footer-content">
+</footer>
+
+</body>
+</html>
