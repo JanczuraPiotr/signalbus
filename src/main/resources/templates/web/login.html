@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+        lang="pl" xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/base.html}"
+>
+<head>
+    <title>[[#{login.pageTitle}]]</title>
+    <link rel="stylesheet" th:href="@{/web/css/const.css}">
+    <link rel="stylesheet" th:href="@{/web/css/apla.css}">
+    <link rel="stylesheet" th:href="@{/web/css/login.css}">
+</head>
+<body>
+
+<header layout:fragment="header-content">
+    <nav>
+        <a class="nav-item" th:href="@{/}">
+            <span>stron główna</span>
+        </a>
+    </nav>
+</header>
+
+<main layout:fragment="main-content">
+    <div class="apla">
+        <form th:action="@{/login}" method="post">
+            <h1>[[#{login.title}]]</h1>
+
+            <p th:if="${param.error}">[[#{login.error}]]</p>
+            <p th:if="${param.logout}">[[#{login.logout}]]</p>
+
+            <label>
+                [[#{login.login}]]
+                <input name="username" autocomplete="username" required>
+            </label>
+
+            <label>
+                [[#{login.password}]]
+                <input
+                        type="password" name="password"
+                        autocomplete="current-password" required
+                >
+            </label>
+
+            <button type="submit" class="btn btn-default">[[#{login.submit}]]</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
