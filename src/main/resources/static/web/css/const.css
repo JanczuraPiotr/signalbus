@@ -1,0 +1,99 @@
+:root {
+    --color-primary: #A0A0A0;
+    --color-primary-light: #C0C0C0;
+    --color-primary-dark: #909090;
+    --color-primary-black: #000000;
+    --color-primary-white: #ffffff;
+    --color-primary-green: #4bb94f;
+    --color-primary-blue: #508ec0;
+    --color-primary-red: #e14b4b;
+    --color-primary-yellow: #e8c94a;
+
+    --color-black: var(--color-primary-black);
+    --color-white: var(--color-primary-white);
+    --color-gray: #eaeaea;
+    --color-gray-light: #f8f8f8;
+    --color-gray-dark: #888888;
+
+    --color-soft-green: #E8F5E9;
+    --color-soft-blue: #e8fcff;
+    --color-soft-blue1: #E3F2FD;
+    --color-soft-celadon: #F1F8E9;
+    --color-soft-orange: #FFF3E0;
+    --color-soft-purple: #F3E5F5;
+    --color-soft-red: #FFEBEE;
+    --color-soft-gray: #F5F5F5;
+    --color-soft-sand: #FAF8F1;
+    --color-soft-black: #303030;
+
+    --color-mid-blue: #9cbdd7;
+    --color-mid-red: #f89494;
+    --color-mid-green: #79bd98;
+    --color-mid-yellow: #ffee8e;
+
+    --color-strong-blue: #0033c7;
+    --color-strong-red: #da2800;
+    --color-strong-green: #0b5200;
+    --color-strong-yellow: #c58700;
+
+    /*---------------------------------------------*/
+
+    --apla-color-bg: var(--color-soft-gray);
+    --apla-border: 1px solid var(--color-gray-dark);
+
+    --base-color-bg: #ffffff;
+
+    --btn-font-size: 1.5rem;
+    --btn-font-weight: bold;
+
+    --btn-default-color-bg: var(--color-primary-blue);
+    --btn-default-color-bg-hover: var(--color-mid-blue);
+    --btn-default-color-text: var(--color-black);
+    --btn-default-color-text-hover: var(--color-strong-blue);
+    --btn-default-color-border: var(--color-primary-blue);
+    --btn-default-color-border-hover: var(--color-strong-blue);
+
+    --btn-accept-color-bg: var(--color-primary-green);
+    --btn-accept-color-bg-hover: var(--color-mid-green);
+    --btn-accept-color-text: var(--color-black);
+    --btn-accept-color-text-hover: var(--color-strong-green);
+    --btn-accept-color-border: var(--color-primary-green);
+    --btn-accept-color-border-hover: var(--color-strong-green);
+
+    --btn-danger-color-bg: var(--color-primary-red);
+    --btn-danger-color-bg-hover: var(--color-mid-red);
+    --btn-danger-color-text: var(--color-black);
+    --btn-danger-color-text-hover: var(--color-strong-red);
+    --btn-danger-color-border: var(--color-primary-red);
+    --btn-danger-color-border-hover: var(--color-strong-red);
+
+    --btn-cancel-color-bg: var(--color-primary-yellow);
+    --btn-cancel-color-bg-hover: var(--color-mid-yellow);
+    --btn-cancel-color-text: var(--color-black);
+    --btn-cancel-color-text-hover: var(--color-strong-yellow);
+    --btn-cancel-color-border: var(--color-primary-yellow);
+    --btn-cancel-color-border-hover: var(--color-strong-yellow);
+
+    --header-color-bg: #eaeaea;
+    --header-color-text: #000000;
+
+
+    --border-radius: 5px;
+
+
+    --box-shadow-height: 3px;
+    --box-shadow-height-hover: 3px;
+    --box-shadow: 0 var(--box-shadow-height) 8px rgba(0, 0, 0, 0.20);
+    --box-shadow-top: 0px calc(-1 * var(--box-shadow-height)) 8px rgba(0, 0, 0, 0.2);
+    --box-shadow-bottom: 0px var(--box-shadow-height) 4px rgba(0, 0, 0, 0.2);
+
+    --button-shadow: 0 0 3px var(--box-shadow-height) rgba(0, 0, 0, 0.20);
+    --button-shadow-hover: 0 0 1px var(--box-shadow-height-hover) rgba(0, 0, 0, 0.20);
+
+    --form-color-background: var(--color-gray);
+
+    --home-header-height: 60px;
+    --home-footer-height: 60px;
+
+    --home-main-height: calc(100vh - var(--home-header-height) - var(--home-footer-height));
+}
