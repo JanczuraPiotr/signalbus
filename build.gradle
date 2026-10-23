@@ -1,0 +1,86 @@
+import java.util.concurrent.TimeUnit
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.vaadin' version '25.3.1'
+}
+
+group = 'pl.janczura'
+version = '0.0.1'
+description = 'signlbus'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('vaadinVersion', "25.3.1")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'
+    runtimeOnly 'org.flywaydb:flyway-database-postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-webservices'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    developmentOnly 'com.vaadin:vaadin-dev'
+    implementation 'com.vaadin:vaadin-spring-boot-starter'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.springframework.boot:spring-boot-starter-jooq-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webservices-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+def gitValue = { List<String> arguments ->
+    providers.exec {
+        commandLine(['git'] + arguments)
+        ignoreExitValue = true
+    }.standardOutput.asText.map { it.trim() ?: 'unknown' }
+}
+
+def generateApplicationMetadata = tasks.register('generateApplicationMetadata') {
+    def metadataDirectory = layout.buildDirectory.dir('generated-resources/application-metadata')
+    inputs.property('build.version', project.version.toString())
+    inputs.property('git.branch', gitValue(['branch', '--show-current']))
+    inputs.property('git.commit.id', gitValue(['rev-parse', '--verify', 'HEAD']))
+    inputs.property('git.commit.time', gitValue(['log', '-1', '--format=%cI']))
+    inputs.property('git.commit.id.describe', gitValue(['describe', '--always', '--dirty']))
+    outputs.dir(metadataDirectory)
+
+
+    doLast {
+        def metadata = new Properties()
+        inputs.properties.each { key, value -> metadata.setProperty(key, value.toString()) }
+        metadata.setProperty('build.timestamp', java.time.LocalDateTime.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS).toString())
+        def outputFile = metadataDirectory.get().file('application-metadata.properties').asFile
+        outputFile.parentFile.mkdirs()
+        outputFile.withOutputStream { metadata.store(it, 'Generated application metadata') }
+    }
+}
+
+sourceSets.main.resources.srcDir(generateApplicationMetadata)
