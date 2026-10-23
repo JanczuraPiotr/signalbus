@@ -1,0 +1,6 @@
+.apla {
+    background-color: var(--apla-color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: var(--apla-border);
+}
