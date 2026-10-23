@@ -43,6 +43,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-webservices-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.testcontainers:testcontainers-jdbc'
+    testRuntimeOnly 'org.testcontainers:testcontainers-postgresql'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
@@ -54,6 +56,11 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
+}
+
+tasks.named('bootTestRun') {
+    systemProperty 'spring.profiles.active', 'test'
 }
 
 def gitValue = { List<String> arguments ->
