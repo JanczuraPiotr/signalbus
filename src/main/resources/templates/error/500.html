@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html
+        lang="pl" xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/base.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - [[#{http.500.title}]] | [[#{app.title}]]</title>
+    <link rel="stylesheet" th:href="@{/web/css/error.css}">
+</head>
+<body>
+
+<header layout:fragment="header-content">
+</header>
+
+<main layout:fragment="main-content">
+    <div th:replace="~{error/error-base :: errorLayout(
+            '500',
+            #{http.500.title},
+            #{http.500.description}
+        )}">
+    </div>
+</main>
+
+<footer layout:fragment="footer-content">
+</footer>
+
+</body>
+</html>

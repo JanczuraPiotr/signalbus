@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html
+        lang="pl" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>[[#{_.error}]]</title>
+</head>
+<body>
+
+<div th:fragment="errorLayout(code, title, description)" class="error-container">
+    <div class="content apla">
+        <div class="error">
+            <h1 class="code" th:text="${code}"></h1>
+            <h2 class="title" th:text="${title}"></h2>
+            <p class="description" th:text="${description}"></p>
+        </div>
+        <div class="buttonGroup">
+            <a class="btn btn-default" th:href="@{/}">
+                <span>[[#{menu.main}]]</span>
+            </a>
+            <a class="btn btn-default" th:href="@{/app/dashboard}">
+                <span>[[#{menu.dashboard}]]</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
