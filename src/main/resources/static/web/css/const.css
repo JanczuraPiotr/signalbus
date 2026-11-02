@@ -36,7 +36,16 @@
     --color-strong-green: #0b5200;
     --color-strong-yellow: #c58700;
 
+    --color-text-error: #d8000c;
+    --color-text-success: #004085;
+    --color-text-data: #000000;
+    --color-text-warning: #ff6c1b;
+
+    --color-http-error-around-bacground: rgb(253 240 225);
+    --color-http-error-bacground: rgb(255 191 191);
+
     /*---------------------------------------------*/
+
 
     --apla-color-bg: var(--color-soft-gray);
     --apla-border: 1px solid var(--color-gray-dark);

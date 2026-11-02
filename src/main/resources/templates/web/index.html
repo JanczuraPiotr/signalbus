@@ -5,8 +5,8 @@
         layout:decorate="~{layout/base.html}"
 >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>[[#{home.title}]]</title>
     <link rel="stylesheet" th:href="@{/web/css/home.css}">
 </head>
@@ -14,11 +14,11 @@
 
 <header layout:fragment="header-content">
     <nav>
-        <a class="nav-item" th:href="@{/uuid-creator}">
-            <span>[[#{menu.dashboardCreator}]]</span>
+        <a class="nav-item" th:href="@{/console-creator}">
+            <span>[[#{menu.consoleCreator}]]</span>
         </a>
-        <a class="nav-item" th:href="@{/app/dashboard}">
-            <span>[[#{menu.dashboard}]]</span>
+        <a class="nav-item" th:href="@{/app/console}">
+            <span>[[#{menu.console}]]</span>
         </a>
         <a class="nav-item" th:href="@{/app/admin}">
             <span>[[#{menu.admin}]]</span>
@@ -28,7 +28,6 @@
 
 <main layout:fragment="main-content">
     <h1>[[#{home.greeting}]]</h1>
-
 </main>
 
 <footer layout:fragment="footer-content">

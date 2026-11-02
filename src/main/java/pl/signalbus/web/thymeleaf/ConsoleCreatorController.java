@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/uuid-creator")
-public class DashboardCreatorController {
+@RequestMapping("/console-creator")
+public class ConsoleCreatorController {
 
     @GetMapping({"", "/"})
     public String index() {
-        return "web/uuid-creator/index";
+        return "web/console-creator/index";
     }
 }
