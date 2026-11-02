@@ -61,7 +61,10 @@ tasks.named('test') {
 
 tasks.named('bootTestRun') {
     systemProperty 'spring.profiles.active', 'test'
+    args = ["--spring.profiles.active=test", "--server.port=0"]
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.test.runtimeClasspath
 }
+
 
 def gitValue = { List<String> arguments ->
     providers.exec {
