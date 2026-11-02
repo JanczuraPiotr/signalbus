@@ -21,7 +21,6 @@ public class HomeTest extends ThymeleafTestBase {
 
     @Test
     void index_hp() {
-        Context context = new Context();
 
         String html = templateEngine.process("web/index", context);
         Document doc = Jsoup.parse(html);

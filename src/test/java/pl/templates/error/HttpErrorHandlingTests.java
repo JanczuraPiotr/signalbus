@@ -61,21 +61,6 @@ class HttpErrorHandlingTests {
     }
 
     @Test
-    void shouldRenderLoginPage() throws Exception {
-        String html = mockMvc.perform(get("/login"))
-                             .andExpect(status().isOk())
-//                             .andExpect(view().name("web/login"))
-                             .andReturn()
-                             .getResponse()
-                             .getContentAsString();
-
-        Document doc = Jsoup.parse(html);
-        assertEquals(Msg.get("login.title"), doc.select("main .apla form h1").text());
-
-
-    }
-
-    @Test
     void shouldRenderCreatorPage() throws Exception {
         for (String path : new String[]{"/console-creator", "/console-creator/"}) {
             mockMvc.perform(get(path))

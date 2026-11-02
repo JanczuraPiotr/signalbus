@@ -9,8 +9,6 @@ import pl.templates.ThymeleafTestBase;
 
 public class ConsoleCreatorTest  extends ThymeleafTestBase {
 
-    private TemplateEngine templateEngine;
-
     @BeforeEach
     void setUp() {
         beforeEach();
