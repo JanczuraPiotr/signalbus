@@ -25,13 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-// TODO init
-
-
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AdminLoginTest {
-    // NOTE AI
 
     @LocalServerPort
     private int port;
@@ -63,7 +59,6 @@ class AdminLoginTest {
                                       .followRedirects(HttpClient.Redirect.NEVER)
                                       .build();
 
-        // 1. Visit /app/admin anonymously -> redirects to /login and saves target
         HttpRequest initialReq = HttpRequest.newBuilder()
                                             .uri(URI.create("http://localhost:" + port + "/app/admin"))
                                             .GET()
@@ -82,12 +77,11 @@ class AdminLoginTest {
 
         String csrfToken = "";
         java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"")
-                                                                  .matcher(loginPageResp.body());
+                                                                 .matcher(loginPageResp.body());
         if (matcher.find()) {
             csrfToken = matcher.group(1);
         }
 
-        // 3. Perform form login with admin credentials and CSRF
         String formData = "username=" + URLEncoder.encode(Pattern.ADMIN_NAME, StandardCharsets.UTF_8)
                 + "&password=" + URLEncoder.encode(Pattern.ADMIN_PASSWORD, StandardCharsets.UTF_8)
                 + "&_csrf=" + URLEncoder.encode(csrfToken, StandardCharsets.UTF_8);
@@ -101,7 +95,6 @@ class AdminLoginTest {
         assertEquals(302, loginResp.statusCode());
         assertTrue(loginResp.headers().firstValue("Location").orElse("").endsWith("/app/admin"));
 
-        // 4. Access /app/admin as authenticated admin -> status 200 OK
         HttpRequest adminReq = HttpRequest.newBuilder()
                                           .uri(URI.create("http://localhost:" + port + "/app/admin"))
                                           .GET()
