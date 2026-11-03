@@ -67,7 +67,6 @@ class AdminLoginTest {
         assertEquals(302, initialResp.statusCode());
         assertTrue(initialResp.headers().firstValue("Location").orElse("").endsWith("/login"));
 
-        // 2. Fetch /login page to get CSRF token
         HttpRequest loginPageReq = HttpRequest.newBuilder()
                                               .uri(URI.create("http://localhost:" + port + "/login"))
                                               .GET()
