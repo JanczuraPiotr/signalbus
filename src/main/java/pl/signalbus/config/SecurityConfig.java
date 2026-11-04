@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import static org.jooq.impl.DSL.field;
@@ -52,13 +53,25 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/error", "/console-creator/**", "/web/**", "/css/**", "/js/**", "/styles.css", "/favicon.ico")
+                .requestMatchers("/",
+                                 "/error",
+                                 "/console-creator/**",
+                                 "/web/**",
+                                 "/css/**",
+                                 "/js/**",
+                                 "/styles.css",
+                                 "/favicon.ico")
                 .permitAll()
                 .requestMatchers("/app/admin", "/app/admin/**").hasRole(UserRole.ADMIN)
                 .requestMatchers("/app/console", "/app/console/**").hasRole(UserRole.CONSOLE)
-                .requestMatchers("/**")
-                .permitAll()
+                .requestMatchers("/**").permitAll()
         );
+
+        http.exceptionHandling(ex -> {
+            AccessDeniedHandlerImpl deniedHandler = new AccessDeniedHandlerImpl();
+            deniedHandler.setErrorPage("/error");
+            ex.accessDeniedHandler(deniedHandler);
+        });
 
         http.formLogin(form -> form
                 .loginPage("/login")

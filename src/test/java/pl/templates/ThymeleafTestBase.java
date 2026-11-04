@@ -50,6 +50,5 @@ public class ThymeleafTestBase {
         };
         templateEngine.setLinkBuilder(linkBuilder);
         context = new Context();
-        context.setVariable("param", Map.of());
     }
 }

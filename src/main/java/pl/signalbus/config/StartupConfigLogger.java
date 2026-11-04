@@ -37,13 +37,9 @@ public class StartupConfigLogger {
 
         log.info("server.ssl.enabled: {}", serverProperties.getSsl() != null && serverProperties.getSsl().isEnabled());
         var cookie = serverProperties.getServlet().getSession().getCookie();
-        boolean sslEnabled = serverProperties.getSsl() != null && serverProperties.getSsl().isEnabled();
-        boolean isSecure = cookie.getSecure() != null ? cookie.getSecure() : sslEnabled;
-        boolean isHttpOnly = cookie.getHttpOnly() != null ? cookie.getHttpOnly() : true;
-        String sameSite = cookie.getSameSite() != null ? cookie.getSameSite().name() : "not set (browser default)";
-        log.info("server.servlet.session.cookie.secure: {} (effective: {})", cookie.getSecure(), isSecure);
-        log.info("server.servlet.session.cookie.http-only: {} (effective: {})", cookie.getHttpOnly(), isHttpOnly);
-        log.info("server.servlet.session.cookie.same-site: {}", sameSite);
+        log.info("server.servlet.session.cookie.secure: {}", cookie.getSecure());
+        log.info("server.servlet.session.cookie.http-only: {}", cookie.getHttpOnly());
+        log.info("server.servlet.session.cookie.same-site: {}", cookie.getSameSite());
 
         log.info("build.version: {}", env.getProperty("build.version", "???"));
         log.info("build.timestamp: {}", env.getProperty("build.timestamp", "???"));

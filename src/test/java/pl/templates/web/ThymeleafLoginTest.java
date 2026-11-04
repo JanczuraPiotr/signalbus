@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LoginTest extends ThymeleafTestBase {
+public class ThymeleafLoginTest extends ThymeleafTestBase {
 
     @BeforeEach
     void setUp() {
@@ -21,6 +21,7 @@ public class LoginTest extends ThymeleafTestBase {
 
     @Test
     void view_hp() {
+        context.setVariable("param", Map.of());
         String html = templateEngine.process("web/login", context);
         Document doc = Jsoup.parse(html);
 

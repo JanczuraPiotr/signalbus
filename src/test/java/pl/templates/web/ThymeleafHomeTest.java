@@ -6,13 +6,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.thymeleaf.context.Context;
 import pl.signalbus.config.Msg;
 import pl.templates.ThymeleafTestBase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HomeTest extends ThymeleafTestBase {
+public class ThymeleafHomeTest extends ThymeleafTestBase {
 
     @BeforeEach
     void setUp() {
