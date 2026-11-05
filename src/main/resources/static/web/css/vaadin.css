@@ -1,0 +1,9 @@
+@import "const.css";
+
+.admin-panel-view {
+    background-color: var(--color-background-red);
+}
+
+.console-view {
+    background-color: var(--color-background-blue);
+}

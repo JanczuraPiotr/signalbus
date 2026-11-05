@@ -2,6 +2,7 @@ package pl.signalbus;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 public class TodoTest {
 

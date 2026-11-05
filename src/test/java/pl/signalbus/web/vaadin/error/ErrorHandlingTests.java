@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("integration")
 @Tag("vaadin")
-@ActiveProfiles("test")
 @SpringBootTest(classes = SignalbusApplication.class)
 public class ErrorHandlingTests {
 
