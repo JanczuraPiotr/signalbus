@@ -1,4 +1,4 @@
-package pl.signalbus;
+package pl.signalbus.security;
 
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import pl.signalbus.security.UserRole;
 
 import java.util.UUID;
 
@@ -29,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // TODO init
 
-@ActiveProfiles("test")
 @SpringBootTest(properties = {"spring.security.user.name=admin", "spring.security.user.password=password"})
 class PanelLoginIntegrationTests {
     private static final UUID CONSOLE_ID = UUID.fromString("72a51d70-5ee1-4c88-9ee8-a8b01195da12");

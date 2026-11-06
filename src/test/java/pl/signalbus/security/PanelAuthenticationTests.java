@@ -1,4 +1,4 @@
-package pl.signalbus;
+package pl.signalbus.security;
 
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import pattern.Pattern;
 import pl.signalbus.config.SecurityConfig;
-import pl.signalbus.security.UserRole;
 
 import java.util.UUID;
 
