@@ -7,36 +7,46 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import jakarta.annotation.security.RolesAllowed;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import pl.signalbus.config.Msg;
 import pl.signalbus.security.UserRole;
-// TODO init
+
+
 @Route("console")
 @RouteAlias("panel")
-@PageTitle("Panel Użytkownika | SignalBus")
 @RolesAllowed(UserRole.CONSOLE)
-public class ConsoleView extends VerticalLayout {
+public class ConsoleView extends VerticalLayout implements HasDynamicTitle {
 
     public ConsoleView(AuthenticationContext authenticationContext) {
+
         setSpacing(true);
         setPadding(true);
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        H2 title = new H2("Konsola (Vaadin)");
-        Paragraph desc = new Paragraph("Konsola");
+        H2 title = new H2(Msg.get("console.title"));
+        Paragraph desc = new Paragraph(Msg.get("console.description"));
 
-        Button homeButton = new Button("Wróć do strony głównej", e -> UI.getCurrent().getPage().setLocation("/"));
-        Button logoutButton = new Button("Wyloguj", e -> authenticationContext.logout());
+
+        Button homeButton = new Button(Msg.get("app.navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
+        Button logoutButton = new Button(Msg.get("app.navi.logout"), e -> authenticationContext.logout());
         logoutButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         HorizontalLayout actions = new HorizontalLayout(homeButton, logoutButton);
         actions.setSpacing(true);
 
         add(title, desc, actions);
+        addClassName("console-view");
     }
+
+    @Override
+    public String getPageTitle() {
+        return Msg.get("app.navi.console") + " | " + Msg.get("app.title");
+    }
+
 }

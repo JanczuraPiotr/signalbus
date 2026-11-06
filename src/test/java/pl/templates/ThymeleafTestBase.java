@@ -3,6 +3,7 @@ package pl.templates;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IExpressionContext;
 import org.thymeleaf.linkbuilder.StandardLinkBuilder;
 import org.thymeleaf.spring6.messageresolver.SpringMessageResolver;
@@ -12,8 +13,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import java.util.Map;
 
 public class ThymeleafTestBase {
+    protected Context context;
     protected TemplateEngine templateEngine;
-    protected ResourceBundleMessageSource messageSource;
+    protected final ResourceBundleMessageSource messageSource;
     protected SpringMessageResolver messageResolver;
 
     public ThymeleafTestBase() {
@@ -47,5 +49,6 @@ public class ThymeleafTestBase {
             }
         };
         templateEngine.setLinkBuilder(linkBuilder);
+        context = new Context();
     }
 }

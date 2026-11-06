@@ -10,17 +10,15 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.NotFoundException;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.servlet.http.HttpServletResponse;
-
-// TODO init
+import pl.signalbus.config.Msg;
 
 @AnonymousAllowed
-@PageTitle("404 - Nie znaleziono strony | SignalBus")
-public class CustomNotFoundView extends VerticalLayout implements HasErrorParameter<NotFoundException> {
+public class CustomNotFoundView extends VerticalLayout implements HasErrorParameter<NotFoundException>, HasDynamicTitle {
 
     private final Paragraph errorMessage;
 
@@ -34,13 +32,13 @@ public class CustomNotFoundView extends VerticalLayout implements HasErrorParame
         H1 code = new H1("404");
         code.getStyle().set("color", "#dd6b20").set("font-size", "3.5rem").set("margin", "0");
 
-        H2 title = new H2("Nie znaleziono strony");
-        Paragraph desc = new Paragraph("Żądana strona w aplikacji nie istnieje.");
+        H2 title = new H2(Msg.get("http.404.title"));
+        Paragraph desc = new Paragraph(Msg.get("http.404.description"));
         errorMessage = new Paragraph();
         errorMessage.getStyle().set("color", "#718096").set("font-size", "0.9rem");
 
-        Button homeButton = new Button("Strona główna", e -> UI.getCurrent().getPage().setLocation("/"));
-        Button panelButton = new Button("Panel Użytkownika", e -> UI.getCurrent().navigate("panel"));
+        Button homeButton = new Button(Msg.get("app.navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
+        Button panelButton = new Button(Msg.get("app.navi.back"), e -> UI.getCurrent().getPage().getHistory().back());
         panelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         HorizontalLayout actions = new HorizontalLayout(homeButton, panelButton);
@@ -55,5 +53,10 @@ public class CustomNotFoundView extends VerticalLayout implements HasErrorParame
             errorMessage.setText(parameter.getCustomMessage());
         }
         return HttpServletResponse.SC_NOT_FOUND;
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation("error.404.title") + " | " + Msg.get("app.name");
     }
 }

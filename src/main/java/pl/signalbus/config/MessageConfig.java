@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class MessageConfig {
 
     @Value("${spring.messages.basename:file:./src/main/resources/messages,classpath:messages}")
-    private String[] basenames;
+    private String[] baseNames;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -24,7 +24,7 @@ public class MessageConfig {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 
-        messageSource.setBasenames(basenames);
+        messageSource.setBasenames(baseNames);
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         messageSource.setCacheSeconds(0);
         messageSource.setFallbackToSystemLocale(false);

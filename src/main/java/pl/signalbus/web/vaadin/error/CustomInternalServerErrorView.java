@@ -10,15 +10,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.HasErrorParameter;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import jakarta.servlet.http.HttpServletResponse;
-// TODO init
+import pl.signalbus.config.Msg;
 
 @AnonymousAllowed
-@PageTitle("500 - Błąd serwera | SignalBus")
-public class CustomInternalServerErrorView extends VerticalLayout implements HasErrorParameter<Exception> {
+public class CustomInternalServerErrorView extends VerticalLayout implements HasErrorParameter<Exception>, HasDynamicTitle {
 
     public CustomInternalServerErrorView() {
         setSpacing(true);
@@ -30,8 +29,8 @@ public class CustomInternalServerErrorView extends VerticalLayout implements Has
         H1 code = new H1("500");
         code.getStyle().set("color", "#e53e3e").set("font-size", "3.5rem").set("margin", "0");
 
-        H2 title = new H2("Wewnętrzny błąd serwera");
-        Paragraph desc = new Paragraph("Wystąpił nieoczekiwany błąd podczas ładowania widoku. Spróbuj ponownie później.");
+        H2 title = new H2(Msg.get("http.500.title"));
+        Paragraph desc = new Paragraph(Msg.get("http.500.description"));
 
         Button homeButton = new Button("Strona główna", e -> UI.getCurrent().getPage().setLocation("/"));
         Button panelButton = new Button("Panel Użytkownika", e -> UI.getCurrent().navigate("panel"));
@@ -46,5 +45,10 @@ public class CustomInternalServerErrorView extends VerticalLayout implements Has
     @Override
     public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<Exception> parameter) {
         return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation("error.500.title") + " | " + Msg.get("app.name");
     }
 }

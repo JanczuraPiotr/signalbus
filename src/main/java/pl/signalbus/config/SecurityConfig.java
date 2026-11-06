@@ -4,14 +4,20 @@ import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import com.vaadin.flow.server.auth.NavigationAccessControl;
 import com.vaadin.flow.spring.security.UidlRedirectStrategy;
 import com.vaadin.flow.spring.security.VaadinSavedRequestAwareAuthenticationSuccessHandler;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.security.autoconfigure.SecurityProperties;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.jooq.DSLContext;
+
+import java.lang.reflect.Proxy;
+import java.util.Objects;
 import java.util.UUID;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import static org.jooq.impl.DSL.field;
@@ -39,7 +46,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    NavigationAccessControl navigationAccessControl,
                                                    VaadinSavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler,
-                                                   DaoAuthenticationProvider authenticationProvider) throws Exception {
+                                                   DaoAuthenticationProvider authenticationProvider) {
         http.authenticationProvider(authenticationProvider);
         navigationAccessControl.setLoginView("/login");
 
@@ -52,13 +59,25 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/error", "/console-creator/**", "/web/**", "/css/**", "/js/**", "/styles.css", "/favicon.ico")
+                .requestMatchers("/",
+                                 "/error",
+                                 "/console-creator/**",
+                                 "/web/**",
+                                 "/css/**",
+                                 "/js/**",
+                                 "/styles.css",
+                                 "/favicon.ico")
                 .permitAll()
                 .requestMatchers("/app/admin", "/app/admin/**").hasRole(UserRole.ADMIN)
                 .requestMatchers("/app/console", "/app/console/**").hasRole(UserRole.CONSOLE)
-                .requestMatchers("/**")
-                .permitAll()
+                .requestMatchers("/**").permitAll()
         );
+
+        http.exceptionHandling(ex -> {
+            AccessDeniedHandlerImpl deniedHandler = new AccessDeniedHandlerImpl();
+            deniedHandler.setErrorPage("/error");
+            ex.accessDeniedHandler(deniedHandler);
+        });
 
         http.formLogin(form -> form
                 .loginPage("/login")
@@ -77,8 +96,14 @@ public class SecurityConfig {
             protected String determineTargetUrl(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 Authentication authentication) {
+
+                if (authentication == null || authentication.getAuthorities().isEmpty()) {
+                    return "/login?error";
+                }
+                
                 boolean admin = authentication.getAuthorities().stream()
-                        .anyMatch(authority -> authority.getAuthority().equals(UserRole.ROLE_ADMIN));
+                                              .anyMatch(authority -> UserRole.ROLE_ADMIN.equals(authority.getAuthority()));
+
                 return admin ? "/app/admin" : "/app/console";
             }
         };
@@ -119,12 +144,12 @@ public class SecurityConfig {
     public DaoAuthenticationProvider panelAuthenticationProvider(UserDetailsService panelUsers) {
         var provider = new DaoAuthenticationProvider(panelUsers) {
             @Override
-            protected void additionalAuthenticationChecks(UserDetails userDetails,
-                    UsernamePasswordAuthenticationToken authentication) {
+            protected void additionalAuthenticationChecks(@NonNull UserDetails userDetails,
+                                                          UsernamePasswordAuthenticationToken authentication) {
                 if (authentication.getDetails() instanceof PanelLoginDetails details
                         && details.requiredRole != null
                         && userDetails.getAuthorities().stream().noneMatch(
-                                authority -> authority.getAuthority().equals(details.requiredRole))) {
+                                authority -> Objects.equals(authority.getAuthority(), details.requiredRole))) {
                     throw new BadCredentialsException("Invalid panel credentials");
                 }
                 super.additionalAuthenticationChecks(userDetails, authentication);
@@ -135,11 +160,31 @@ public class SecurityConfig {
     }
 
     private static class PanelLoginDetails extends WebAuthenticationDetails {
+        private static final HttpServletResponse DUMMY_RESPONSE = (HttpServletResponse) Proxy.newProxyInstance(
+                HttpServletResponse.class.getClassLoader(),
+                new Class<?>[]{HttpServletResponse.class},
+                (proxy, method, args) -> {
+                    Class<?> returnType = method.getReturnType();
+                    if (returnType.isPrimitive()) {
+                        if (returnType == boolean.class) return false;
+                        if (returnType == int.class) return 0;
+                        if (returnType == long.class) return 0L;
+                        if (returnType == byte.class) return (byte) 0;
+                        if (returnType == short.class) return (short) 0;
+                        if (returnType == float.class) return 0.0f;
+                        if (returnType == double.class) return 0.0d;
+                        if (returnType == char.class) return '\0';
+                    }
+                    return null;
+                }
+        );
+
         private final String requiredRole;
 
         PanelLoginDetails(HttpServletRequest request) {
             super(request);
-            var saved = new HttpSessionRequestCache().getRequest(request, null);
+
+            var saved = new HttpSessionRequestCache().getRequest(request, DUMMY_RESPONSE);
             String path = saved == null ? "" : java.net.URI.create(saved.getRedirectUrl()).getPath();
             String contextPath = request.getContextPath();
             if (!contextPath.isEmpty() && path.startsWith(contextPath + "/")) {

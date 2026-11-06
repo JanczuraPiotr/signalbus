@@ -11,8 +11,6 @@ import pl.signalbus.config.SecurityConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-// TODO init
-
 class LoginTests {
 
     @Test
@@ -21,14 +19,14 @@ class LoginTests {
     }
 
     @Test
-    void directconsoleLoginRedirectsToConsole() throws Exception {
+    void directConsoleLoginRedirectsToConsole() throws Exception {
         assertRedirect(UserRole.ROLE_CONSOLE, "/app/console");
     }
 
     private void assertRedirect(String role, String target) throws Exception {
         var request = new MockHttpServletRequest("POST", "/login");
         var response = new MockHttpServletResponse();
-        // Jako user może pojawić się UUID consoleu lub login pasujący do danych uwierzytelniających administratora
+        // Jako user może pojawić się UUID konsoli lub login pasujący do danych uwierzytelniających administratora
         new SecurityConfig().authenticationSuccessHandler()
                             .onAuthenticationSuccess(request,
                                                      response,
