@@ -54,10 +54,23 @@ dependencyManagement {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.incremental = true
+}
+
 tasks.named('test') {
     useJUnitPlatform()
     systemProperty 'spring.profiles.active', 'test'
-    jvmArgs '--enable-native-access=ALL-UNNAMED'
+    systemProperty 'spring.output.ansi.enabled', 'always'
+
+    jvmArgs '--enable-native-access=ALL-UNNAMED', '-XX:+EnableDynamicAgentLoading', '-Xshare:off'
+
+    outputs.upToDateWhen { false }
+    onOutput { descriptor, event ->
+        if (event.destination == org.gradle.api.tasks.testing.TestOutputEvent.Destination.StdErr) {
+            print event.message
+        }
+    }
 }
 
 tasks.named('bootTestRun') {

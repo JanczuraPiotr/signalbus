@@ -51,8 +51,8 @@ class ConsoleViewTest {
 
     @Test
     void shouldTriggerLogoutWhenLogoutButtonClicked() {
-        Button logoutButton = findButtonByText(Msg.get("app.menu.logout"));
-        assertNotNull(logoutButton, "Przycisk '"+Msg.get("app.menu.logout")+"' powinien istnieć");
+        Button logoutButton = findButtonByText(Msg.get("app.navi.logout"));
+        assertNotNull(logoutButton, "Przycisk '"+Msg.get("app.navi.logout")+"' powinien istnieć");
 
         logoutButton.click();
 
@@ -61,8 +61,8 @@ class ConsoleViewTest {
 
     @Test
     void shouldHaveHomeButtonPresent() {
-        Button homeButton = findButtonByText(Msg.get("app.menu.main"));
-        assertNotNull(homeButton, "Przycisk '"+Msg.get("app.menu.main")+"' powinien istnieć");
+        Button homeButton = findButtonByText(Msg.get("app.navi.main"));
+        assertNotNull(homeButton, "Przycisk '"+Msg.get("app.navi.main")+"' powinien istnieć");
     }
 
     private Button findButtonByText(String text) {

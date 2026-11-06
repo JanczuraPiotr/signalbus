@@ -16,8 +16,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO init
-
 class PanelAuthenticationTests {
 
     private DaoAuthenticationProvider provider() {
@@ -42,18 +40,22 @@ class PanelAuthenticationTests {
         var authentication = provider().authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(Pattern.ADMIN_NAME, Pattern.ADMIN_PASSWORD));
         assertTrue(authentication.isAuthenticated());
-        assertTrue(authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(UserRole.ROLE_ADMIN)));
-        assertFalse(authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(UserRole.ROLE_CONSOLE)));
+        assertTrue(authentication.getAuthorities().stream()
+                                 .anyMatch(role -> UserRole.ROLE_ADMIN.equals(role.getAuthority())));
+        assertFalse(authentication.getAuthorities().stream()
+                                  .anyMatch(role -> UserRole.ROLE_CONSOLE.equals(role.getAuthority())));
     }
 
     @Test
-    void consoleUsesDatabasePasswordAndconsoleRole() {
+    void consoleUsesDatabasePasswordAndConsoleRole() {
         var authentication = provider().authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(Pattern.CONSOLE_UUID.toString(), "console-secret"));
         assertTrue(authentication.isAuthenticated());
         assertEquals(Pattern.CONSOLE_UUID.toString(), authentication.getName());
-        assertTrue(authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(UserRole.ROLE_CONSOLE)));
-        assertFalse(authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(UserRole.ROLE_ADMIN)));
+        assertFalse(authentication.getAuthorities().stream()
+                                  .anyMatch(role -> UserRole.ROLE_ADMIN.equals(role.getAuthority())));
+        assertTrue(authentication.getAuthorities().stream()
+                                 .anyMatch(role -> UserRole.ROLE_CONSOLE.equals(role.getAuthority())));
     }
 
     @Test
@@ -65,7 +67,7 @@ class PanelAuthenticationTests {
     }
 
     @Test
-    void missingconsoleAndMalformedUuidAreRejected() {
+    void missingConsoleAndMalformedUuidAreRejected() {
         for (String username : new String[]{UUID.randomUUID().toString(), "invalid", "1-1-1-1-1"}) {
             assertThrows(BadCredentialsException.class, () -> provider().authenticate(
                     UsernamePasswordAuthenticationToken.unauthenticated(username, "console-secret")));

@@ -3,7 +3,6 @@ package pl.signalbus.config;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.context.annotation.PropertySource;
@@ -19,11 +18,11 @@ public class StartupConfigLogger {
 
     private final ServerProperties serverProperties;
 
-    @Autowired
     private Environment env;
 
-    public StartupConfigLogger(ServerProperties serverProperties) {
+    public StartupConfigLogger(ServerProperties serverProperties, Environment env) {
         this.serverProperties = serverProperties;
+        this.env = env;
     }
 
     @PostConstruct

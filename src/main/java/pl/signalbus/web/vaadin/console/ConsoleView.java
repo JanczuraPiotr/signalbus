@@ -33,8 +33,8 @@ public class ConsoleView extends VerticalLayout implements HasDynamicTitle {
         Paragraph desc = new Paragraph(Msg.get("console.description"));
 
 
-        Button homeButton = new Button(Msg.get("app.menu.main"), e -> UI.getCurrent().getPage().setLocation("/"));
-        Button logoutButton = new Button(Msg.get("app.menu.logout"), e -> authenticationContext.logout());
+        Button homeButton = new Button(Msg.get("app.navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
+        Button logoutButton = new Button(Msg.get("app.navi.logout"), e -> authenticationContext.logout());
         logoutButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         HorizontalLayout actions = new HorizontalLayout(homeButton, logoutButton);
@@ -46,7 +46,7 @@ public class ConsoleView extends VerticalLayout implements HasDynamicTitle {
 
     @Override
     public String getPageTitle() {
-        return Msg.get("app.menu.console") + " | " + Msg.get("app.title");
+        return Msg.get("app.navi.console") + " | " + Msg.get("app.title");
     }
 
 }

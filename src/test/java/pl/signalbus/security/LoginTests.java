@@ -19,7 +19,7 @@ class LoginTests {
     }
 
     @Test
-    void directconsoleLoginRedirectsToConsole() throws Exception {
+    void directConsoleLoginRedirectsToConsole() throws Exception {
         assertRedirect(UserRole.ROLE_CONSOLE, "/app/console");
     }
 

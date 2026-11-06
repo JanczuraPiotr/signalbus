@@ -2,12 +2,11 @@ package pl.signalbus;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 public class TodoTest {
 
     protected void todo(String message) {
-        System.out.println(message);
+        System.err.println("\u001B[33m" + message + "\u001B[0m");
         Assumptions.abort("TODO: " + message);
     }
 

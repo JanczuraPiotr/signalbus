@@ -15,7 +15,7 @@ import java.util.Map;
 public class ThymeleafTestBase {
     protected Context context;
     protected TemplateEngine templateEngine;
-    protected ResourceBundleMessageSource messageSource;
+    protected final ResourceBundleMessageSource messageSource;
     protected SpringMessageResolver messageResolver;
 
     public ThymeleafTestBase() {

@@ -31,8 +31,8 @@ public class AdminPanelView extends VerticalLayout implements HasDynamicTitle {
         H2 title = new H2(Msg.get("admin.title"));
         Paragraph desc = new Paragraph(Msg.get("admin.description"));
 
-        Button homeButton = new Button(Msg.get("app.menu.main"), e -> UI.getCurrent().getPage().setLocation("/"));
-        Button logoutButton = new Button(Msg.get("app.menu.logout"), e -> authenticationContext.logout());
+        Button homeButton = new Button(Msg.get("app.navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
+        Button logoutButton = new Button(Msg.get("app.navi.logout"), e -> authenticationContext.logout());
         logoutButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         HorizontalLayout actions = new HorizontalLayout(homeButton, logoutButton);
