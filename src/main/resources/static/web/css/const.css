@@ -1,6 +1,6 @@
 :root {
     --color-primary: #A0A0A0;
-    --color-primary-light: #C0C0C0;
+    --color-primary-light: #d9d9d9;
     --color-primary-dark: #909090;
     --color-primary-black: #000000;
     --color-primary-white: #ffffff;
@@ -22,7 +22,8 @@
     --color-soft-orange: #FFF3E0;
     --color-soft-purple: #F3E5F5;
     --color-soft-red: #FFEBEE;
-    --color-soft-gray: #F5F5F5;
+    --color-soft-gray: #FAFAFA;
+    --color-soft-yellow: #fff5d1;
     --color-soft-sand: #FAF8F1;
     --color-soft-black: #303030;
 
@@ -37,9 +38,10 @@
     --color-strong-yellow: #c58700;
 
     --color-text-error: #d8000c;
-    --color-text-success: #004085;
+    --color-text-success: #0c7a00;
     --color-text-data: #000000;
-    --color-text-warning: #ff6c1b;
+    --color-text-warning: #ff4400;
+    --color-text-info: var(--color-primary-black);
 
     --color-http-error-around-bacground: rgb(253 240 225);
     --color-http-error-bacground: rgb(255 191 191);
@@ -52,11 +54,14 @@
 
     /*---------------------------------------------*/
 
+    --padding: 1.6rem;
 
-    --apla-color-bg: var(--color-soft-gray);
-    --apla-border: 1px solid var(--color-gray-dark);
+    --apla-color-bg: var(--color-primary-white);
+    --apla-border: 1px solid var(--color-primary-dark);
 
-    --base-color-bg: #ffffff;
+
+    --base-color-bg: var(--color-soft-gray);
+
 
     --btn-font-size: 1.5rem;
     --btn-font-weight: bold;
@@ -95,7 +100,6 @@
 
     --border-radius: 5px;
 
-
     --box-shadow-height: 3px;
     --box-shadow-height-hover: 3px;
     --box-shadow: 0 var(--box-shadow-height) 8px rgba(0, 0, 0, 0.20);
@@ -111,4 +115,21 @@
     --home-footer-height: 60px;
 
     --home-main-height: calc(100vh - var(--home-header-height) - var(--home-footer-height));
+
+    --main-gap: 5px;
+
+    --notification-information-color: var(--color-primary-black);
+    --notification-information-bg-color: var(--color-white);
+    --notification-success-color: var(--color-text-success);
+    --notification-success-bg-color: var(--color-soft-green);
+    --notification-warning-color: var(--color-text-warning);
+    --notification-warning-bg-color: var(--color-soft-yellow);
+    --notification-error-color: var(--color-text-error);
+    --notification-error-bg-color: var(--color-soft-red);
+    --notification-box-shadow: var(--box-shadow);
+    --notification-padding: 10px;
+    --notification-margin: 1px;
+    --notification-radius: var(--border-radius);
+
+    --notification-border-radius: var(--border-radius);
 }

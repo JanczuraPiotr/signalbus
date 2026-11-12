@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+
+<body>
+
+<div th:fragment="success(text)">
+    <div class="notification">
+        <div class="success">
+            <div class="frame">
+                <span th:text="${text}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="information(text)">
+    <div class="notification">
+        <div class="information">
+            <div class="frame">
+                <span th:text="${text}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="warning(text)">
+    <div class="notification">
+        <div class="warning">
+            <div class="frame">
+                <span th:text="${text}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="error(text)">
+    <div class="notification">
+        <div class="error">
+            <div class="frame">
+                <span th:text="${text}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>[[#{console.creator.title}]]</title>
     <link rel="stylesheet" th:href="@{/web/css/const.css}"/>
-    <link rel="stylesheet" th:href="@{/web/css/home.css}"/>
+    <link rel="stylesheet" th:href="@{/web/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/web/css/fragment/notification.css}"/>
 </head>
 <body>
 
@@ -23,7 +24,36 @@
 
 
 <main layout:fragment="main-content">
-    <h1>[[#{console.creator.greeting}]]</h1>
+    <h1>[[#{rules.console.creator.greeting}]]</h1>
+    <p id="description" class="apla">[[#{rules.console.creator.description}]]</p>
+
+    <div id="rules" class="apla">
+
+        <div id="rules-console">
+            <h3>[[#{rules.title}]]</h3>
+            <ul>
+                <li>[[#{rules.console.001}]]</li>
+                <li>[[#{rules.console.002}]]</li>
+                <li>[[#{rules.console.003}]]</li>
+            </ul>
+        </div>
+
+        <div id="rules-console-creator">
+            <h3>[[#{rules.console.creator.title}]]</h3>
+            <ul>
+                <li>[[#{rules.console.creator.001}]]</li>
+                <li>[[#{rules.console.creator.002}]]</li>
+                <li>[[#{rules.console.creator.003}]]</li>
+                <li>[[#{rules.console.creator.004}]]</li>
+                <li>[[#{rules.console.creator.005}]]</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="apla">
+    </div>
+
 </main>
 
 

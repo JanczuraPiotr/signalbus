@@ -73,11 +73,11 @@ class ConsoleViewTest {
                               }
                               return java.util.stream.Stream.of(component);
                           })
-                          .filter(Button.class::isInstance)
-                          .map(Button.class::cast)
-                          .filter(b -> text.equals(b.getText()))
-                          .findFirst()
-                          .orElse(null);
+                             .filter(Button.class::isInstance)
+                             .map(Button.class::cast)
+                             .filter(b -> text.equals(b.getText()))
+                             .findFirst()
+                             .orElse(null);
     }
 
 }
