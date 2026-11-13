@@ -1,0 +1,7 @@
+@apiPort=8080
+@url=http://localhost:{{apiPort}}
+
+@pathConsole=/api/v1/console
+
+### Generate console UUID
+GET {{url}}{{pathConsole}}/generate-uuid
