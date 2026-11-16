@@ -43,7 +43,7 @@ class HttpErrorHandlingTests {
             mockMvc.perform(get(path))
                     .andExpect(status().isOk())
                     .andExpect(view().name("web/console-creator/index"))
-                    .andExpect(content().string(containsString("/web/css/home.css")));
+                    .andExpect(content().string(containsString("/web/css/base.css")));
         }
     }
 

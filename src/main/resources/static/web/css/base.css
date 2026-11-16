@@ -1,8 +1,41 @@
+* {
+    margin: 0;
+}
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
+
+h1 {
+    padding: 1.2rem;
+}
+
+h2, h3 {
+    margin: 0;
+    padding: 0.8rem ;
+}
+
+h4, h5 {
+    margin: 0;
+    padding: 0.6rem ;
+}
+
+div, p {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    padding: 0 var(--padding);
+    margin: 0;
+}
+li {
+    padding: 0;
+    margin: 0 var(--padding);
+}
+
 
 html {
     font-size: 62.5%!important;
@@ -46,6 +79,10 @@ body {
 
 
     main {
+        display: flex;
+        flex-direction: column;
+        gap: var(--main-gap);
+
         box-sizing: border-box;
         overflow: auto;
         padding-left: 10vw;

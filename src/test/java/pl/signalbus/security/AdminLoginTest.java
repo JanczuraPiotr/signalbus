@@ -2,12 +2,14 @@ package pl.signalbus.security;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pattern.Pattern;
 
@@ -30,13 +32,16 @@ class AdminLoginTest {
     @LocalServerPort
     private int port;
 
-    @MockitoBean
+    @MockitoBean(name = "panelUsers")
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUpSecurity() {
         UserDetails adminDetails = User.withUsername(Pattern.ADMIN_NAME)
-                                       .password("{noop}" + Pattern.ADMIN_PASSWORD)
+                                       .password(passwordEncoder.encode(Pattern.ADMIN_PASSWORD))
                                        .roles(UserRole.ADMIN)
                                        .build();
 

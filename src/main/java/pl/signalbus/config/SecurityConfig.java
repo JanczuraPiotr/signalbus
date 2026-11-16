@@ -5,20 +5,21 @@ import com.vaadin.flow.server.auth.NavigationAccessControl;
 import com.vaadin.flow.spring.security.UidlRedirectStrategy;
 import com.vaadin.flow.spring.security.VaadinSavedRequestAwareAuthenticationSuccessHandler;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.security.autoconfigure.SecurityProperties;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.signalbus.security.PasswordHashing;
 import org.jooq.DSLContext;
 
 import java.lang.reflect.Proxy;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import static org.jooq.impl.DSL.currentTimestamp;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
@@ -90,8 +92,33 @@ public class SecurityConfig {
     }
 
     @Bean
-    public VaadinSavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler() {
+    public VaadinSavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler(DSLContext database) {
         var handler = new VaadinSavedRequestAwareAuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request,
+                                                HttpServletResponse response,
+                                                Authentication authentication) throws IOException, ServletException {
+                updateLastLogin(authentication);
+                super.onAuthenticationSuccess(request, response, authentication);
+            }
+
+            private void updateLastLogin(Authentication authentication) {
+                if (authentication != null && database != null) {
+                    boolean isConsole = authentication.getAuthorities().stream()
+                            .anyMatch(authority -> UserRole.ROLE_CONSOLE.equals(authority.getAuthority()));
+                    if (isConsole) {
+                        try {
+                            UUID consoleId = UUID.fromString(authentication.getName());
+                            database.update(table(name("console")))
+                                    .set(field(name("last_login")), currentTimestamp())
+                                    .where(field(name("id"), UUID.class).eq(consoleId))
+                                    .execute();
+                        } catch (IllegalArgumentException ignored) {
+                        }
+                    }
+                }
+            }
+
             @Override
             protected String determineTargetUrl(HttpServletRequest request,
                                                 HttpServletResponse response,
@@ -111,12 +138,22 @@ public class SecurityConfig {
         return handler;
     }
 
+    public VaadinSavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler() {
+        return authenticationSuccessHandler(null);
+    }
+
     @Bean
-    public UserDetailsService panelUsers(SecurityProperties properties, DSLContext database) {
+    public PasswordEncoder passwordEncoder() {
+        return PasswordHashing.createEncoder();
+    }
+
+    @Bean
+    public UserDetailsService panelUsers(SecurityProperties properties, DSLContext database, PasswordEncoder passwordEncoder) {
+        var admin = properties.getUser();
+        String adminPasswordHash = passwordEncoder.encode(admin.getPassword());
         return username -> {
-            var admin = properties.getUser();
             if (admin.getName().equals(username)) {
-                return User.withUsername(username).password("{noop}" + admin.getPassword())
+                return User.withUsername(username).password(adminPasswordHash)
                         .roles("ADMIN").build();
             }
             UUID consoleId;
@@ -135,13 +172,13 @@ public class SecurityConfig {
             if (password == null) {
                 throw new UsernameNotFoundException("Invalid console credentials");
             }
-            return User.withUsername(consoleId.toString()).password("{noop}" + password)
+            return User.withUsername(consoleId.toString()).password(password)
                     .roles(UserRole.CONSOLE).build();
         };
     }
 
     @Bean
-    public DaoAuthenticationProvider panelAuthenticationProvider(UserDetailsService panelUsers) {
+    public DaoAuthenticationProvider panelAuthenticationProvider(UserDetailsService panelUsers, PasswordEncoder passwordEncoder) {
         var provider = new DaoAuthenticationProvider(panelUsers) {
             @Override
             protected void additionalAuthenticationChecks(@NonNull UserDetails userDetails,
@@ -155,7 +192,7 @@ public class SecurityConfig {
                 super.additionalAuthenticationChecks(userDetails, authentication);
             }
         };
-        provider.setPasswordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder());
+        provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 

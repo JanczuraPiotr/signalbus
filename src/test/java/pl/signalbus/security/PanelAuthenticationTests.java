@@ -22,17 +22,19 @@ class PanelAuthenticationTests {
         var properties = new SecurityProperties();
         properties.getUser().setName(Pattern.ADMIN_NAME);
         properties.getUser().setPassword(Pattern.ADMIN_PASSWORD);
-        var passwordField = DSL.field(DSL.name(Pattern.ADMIN_PASSWORD), String.class);
+        var config = new SecurityConfig();
+        var encoder = config.passwordEncoder();
+        var passwordField = DSL.field(DSL.name("password"), String.class);
         var connection = new MockConnection(context -> {
             var dsl = DSL.using(SQLDialect.POSTGRES);
             var result = dsl.newResult(passwordField);
             if (Pattern.CONSOLE_UUID.equals(context.bindings()[0])) {
-                result.add(dsl.newRecord(passwordField).value1("console-secret"));
+                result.add(dsl.newRecord(passwordField).value1(encoder.encode("console-secret")));
             }
             return new MockResult[]{new MockResult(result.size(), result)};
         });
-        var config = new SecurityConfig();
-        return config.panelAuthenticationProvider(config.panelUsers(properties, DSL.using(connection, SQLDialect.POSTGRES)));
+        return config.panelAuthenticationProvider(
+                config.panelUsers(properties, DSL.using(connection, SQLDialect.POSTGRES), encoder), encoder);
     }
 
     @Test

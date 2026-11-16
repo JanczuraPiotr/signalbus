@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html
+        lang="pl" xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/base.html}"
+>
+<head>
+    <title>[[#{console.creator.pageTitle}]]</title>
+    <link rel="stylesheet" th:href="@{/web/css/const.css}"/>
+    <link rel="stylesheet" th:href="@{/web/css/apla.css}"/>
+    <link rel="stylesheet" th:href="@{/web/css/login.css}"/>
+</head>
+<body>
+
+<header layout:fragment="header-content">
+    <nav>
+        <a class="nav-item" th:href="@{/}">
+            <span>[[#{app.mainPage}]]</span>
+        </a>
+    </nav>
+</header>
+
+<main layout:fragment="main-content">
+    <div class="apla">
+        <form id="creatorForm" th:action="@{/console-creator/creator}" method="post">
+            <h1>[[#{console.creator.title}]]</h1>
+
+            <p th:if="${error}" class="error-msg" th:text="${error}"></p>
+
+            <label for="username">
+                [[#{console.creator.username}]]
+            </label>
+            <input
+                    type="text" name="username" id="username"
+                    th:value="${username != null ? username : uuid}"
+                    autocomplete="username" required
+                    onkeydown="return false;"
+                    style="background-color: #e0e0e0; cursor: not-allowed;"
+            >
+
+            <label for="password">
+                [[#{console.creator.password}]]
+            </label>
+            <input
+                    type="password" name="password" id="password"
+                    autocomplete="new-password" required
+            >
+
+            <label for="passwordRepeat">
+                [[#{console.creator.passwordRepeat}]]
+            </label>
+            <input
+                    type="password" name="passwordRepeat" id="passwordRepeat"
+                    autocomplete="new-password" required
+            >
+
+            <button type="submit" class="btn btn-default">[[#{console.creator.submit}]]</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('creatorForm');
+        const usernameInput = document.getElementById('username');
+
+        usernameInput.addEventListener('paste', (e) => {
+            e.preventDefault()
+        });
+
+        form.addEventListener('submit', async function (event) {
+            const passwordInput = document.getElementById('password');
+            const passwordRepeatInput = document.getElementById('passwordRepeat');
+
+            if (passwordInput.value !== passwordRepeatInput.value) {
+                return;
+            }
+
+            if (window.PasswordCredential && usernameInput.value && passwordInput.value) {
+                event.preventDefault();
+
+                try {
+                    const credential = new PasswordCredential({
+                        id: usernameInput.value,
+                        password: passwordInput.value,
+                        name: 'Konsola ' + usernameInput.value
+                    });
+
+                    await navigator.credentials.store(credential);
+                } catch (err) {
+                    console.error('Błąd zapisu poświadczeń:', err);
+                } finally {
+                    form.submit();
+                }
+            }
+        });
+    </script>
+</main>
+
+</body>
+</html>

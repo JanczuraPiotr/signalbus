@@ -1,0 +1,40 @@
+@import url('../const.css');
+
+.notification {
+
+    .information {
+        color: var(--notification-information-color);
+        background-color: var(--notification-information-bg-color);
+        box-shadow: var(--box-shadow);
+        padding: var(--notification-padding);
+        border-radius: var(--notification-radius);
+        margin: var(--notification-margin);
+    }
+
+    .success {
+        color: var(--notification-success-color);
+        background-color: var(--notification-success-bg-color);
+        box-shadow: var(--box-shadow);
+        padding: var(--notification-padding);
+        border-radius: var(--notification-radius);
+        margin: var(--notification-margin);
+    }
+
+    .error {
+        color: var(--notification-error-color);
+        background-color: var(--notification-error-bg-color);
+        box-shadow: var(--box-shadow);
+        padding: var(--notification-padding);
+        border-radius: var(--notification-radius);
+        margin: var(--notification-margin);
+    }
+
+    .warning {
+        color: var(--notification-warning-color);
+        background-color: var(--notification-warning-bg-color);
+        box-shadow: var(--box-shadow);
+        padding: var(--notification-padding);
+        border-radius: var(--notification-radius);
+        margin: var(--notification-margin);
+    }
+}

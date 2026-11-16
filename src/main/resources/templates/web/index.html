@@ -8,7 +8,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>[[#{home.title}]]</title>
-    <link rel="stylesheet" th:href="@{/web/css/home.css}">
+
 </head>
 <body>
 
@@ -28,6 +28,46 @@
 
 <main layout:fragment="main-content">
     <h1>[[#{home.greeting}]]</h1>
+
+    <p id="privacy_policy" class="apla">[[#{home.privacy_policy}]]</p>
+    <p id="cookies" class="apla">[[#{home.cookies}]]</p>
+    <p id="prototyp" class="apla">[[#{home.prototyp}]]</p>
+
+    <div id="description" class="apla">
+        <h2>[[#{home.description}]]</h2>
+        <ul>
+            <li>[[#{home.description.1}]]</li>
+            <li>[[#{home.description.2}]]</li>
+        </ul>
+    </div>
+
+    <div id="rules" class="apla">
+        <h2>[[#{rules.title}]]</h2>
+        <h4>[[#{rules.basic}]]</h4>
+        <ul>
+            <li>[[#{rules.basic.001}]]</li>
+            <li>[[#{rules.basic.002}]]</li>
+            <li>[[#{rules.basic.003}]]</li>
+
+            <li>[[#{rules.console}]]
+                <ul>
+                    <li>[[#{rules.console.001}]]</li>
+                    <li>[[#{rules.console.002}]]</li>
+                </ul>
+            </li>
+
+            <li>[[#{rules.magistrala}]]
+                <ul>
+                    <li>[[#{rules.magistrala.001}]]</li>
+                    <li>[[#{rules.magistrala.002}]]</li>
+                    <li>[[#{rules.magistrala.003}]]</li>
+                    <li>[[#{rules.magistrala.004}]]</li>
+                    <li>[[#{rules.magistrala.005}]]</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <h4 id="write-me"> [[#{home.write.me}]]</h4>
 </main>
 
 <footer layout:fragment="footer-content">
