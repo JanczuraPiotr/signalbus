@@ -1,9 +1,6 @@
 package pl.signalbus.web.thymeleaf;
 
 import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
-import org.jooq.InsertSetStep;
-import org.jooq.InsertValuesStep2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -21,7 +18,7 @@ import java.util.UUID;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
 import static org.jooq.impl.DSL.table;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -42,6 +39,9 @@ class ConsoleCreatorControllerTest {
 
     @MockitoBean
     ConsoleUUIDService consoleUUIDService;
+
+    @Autowired
+    org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     MockMvc mvc;
 
@@ -121,10 +121,12 @@ class ConsoleCreatorControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
 
-        verify(database).insertInto(
-                eq(table(name("console"))),
-                eq(field(name("id"), UUID.class)),
-                eq(field(name("password"), String.class))
-        );
+        var hash = ArgumentCaptor.forClass(String.class);
+        verify(database.insertInto(table(name("console")), field(name("id"), UUID.class),
+                field(name("password"), String.class)))
+                .values(eq(UUID.fromString(TEST_UUID)), hash.capture());
+        assertNotEquals("secret123", hash.getValue());
+        assertTrue(passwordEncoder.matches("secret123", hash.getValue()));
+        assertFalse(passwordEncoder.matches("wrong", hash.getValue()));
     }
 }

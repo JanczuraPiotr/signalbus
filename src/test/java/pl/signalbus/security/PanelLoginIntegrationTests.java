@@ -38,13 +38,16 @@ class PanelLoginIntegrationTests {
 
     MockMvc mvc;
 
+    @org.springframework.beans.factory.annotation.Autowired
+    org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         when(database.select(field(name("password"), String.class))
                 .from(table(name("console")))
                 .where(field(name("id"), UUID.class).eq(CONSOLE_ID))
-                .fetchOne(field(name("password"), String.class))).thenReturn("console-secret");
+                .fetchOne(field(name("password"), String.class))).thenReturn(passwordEncoder.encode("console-secret"));
     }
 
     @Test
@@ -59,6 +62,8 @@ class PanelLoginIntegrationTests {
         mvc.perform(formLogin().user(CONSOLE_ID.toString()).password("console-secret"))
                 .andExpect(authenticated().withRoles(UserRole.CONSOLE))
                 .andExpect(redirectedUrl("/app/console"));
+
+        org.mockito.Mockito.verify(database).update(table(name("console")));
     }
 
     @Test

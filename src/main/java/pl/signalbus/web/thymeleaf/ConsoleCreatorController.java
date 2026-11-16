@@ -2,6 +2,7 @@ package pl.signalbus.web.thymeleaf;
 
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,12 @@ public class ConsoleCreatorController {
     private final ConsoleUUIDService consoleUUIDService;
     private final DSLContext database;
 
-    public ConsoleCreatorController(ConsoleUUIDService consoleUUIDService, DSLContext database) {
+    private final PasswordEncoder passwordEncoder;
+
+    public ConsoleCreatorController(ConsoleUUIDService consoleUUIDService, DSLContext database, PasswordEncoder passwordEncoder) {
         this.consoleUUIDService = consoleUUIDService;
         this.database = database;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping({"", "/"})
@@ -68,7 +72,7 @@ public class ConsoleCreatorController {
         }
 
         database.insertInto(table(name("console")), field(name("id"), UUID.class), field(name("password"), String.class))
-                .values(consoleId, password)
+                .values(consoleId, passwordEncoder.encode(password))
                 .execute();
 
         return "redirect:/login";

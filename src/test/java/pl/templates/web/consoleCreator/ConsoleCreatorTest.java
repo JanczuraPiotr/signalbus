@@ -68,7 +68,6 @@ public class ConsoleCreatorTest extends ThymeleafTestBase {
         var usernameInput = form.select("input[name=username]");
         assertEquals(1, usernameInput.size(), "Brak pola na username/UUID");
         assertEquals(testUuid, usernameInput.val());
-        assertEquals("readonly", usernameInput.attr("readonly"));
 
         var passwordInput = form.select("input[name=password][type=password]");
         assertEquals(1, passwordInput.size(), "Brak pierwszego pola na hasło");

@@ -33,10 +33,13 @@ class AdminLoginTest {
     @MockitoBean
     private UserDetailsService userDetailsService;
 
+    @org.springframework.beans.factory.annotation.Autowired
+    org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUpSecurity() {
         UserDetails adminDetails = User.withUsername(Pattern.ADMIN_NAME)
-                                       .password("{noop}" + Pattern.ADMIN_PASSWORD)
+                                       .password(passwordEncoder.encode(Pattern.ADMIN_PASSWORD))
                                        .roles(UserRole.ADMIN)
                                        .build();
 
