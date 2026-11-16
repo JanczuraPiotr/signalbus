@@ -1,13 +1,14 @@
 package pl.signalbus.web.vaadin.console;
 
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.signalbus.config.Msg;
+import tool.Action;
 
 import java.util.Optional;
 
@@ -32,52 +33,39 @@ class ConsoleViewTest {
     @Test
     void shouldContainCorrectVisualElements() {
 
-        Optional<H2> title = consoleView.getChildren()
-                                        .filter(H2.class::isInstance)
-                                        .map(H2.class::cast)
-                                        .findFirst();
+        Optional<H1> title = ComponentUtil.streamDescendants(consoleView)
+                                          .filter(H1.class::isInstance)
+                                          .map(H1.class::cast)
+                                          .findFirst();
 
-        assertTrue(title.isPresent(), "Widok powinien zawierać nagłówek H2");
+        assertTrue(title.isPresent(), "Widok powinien zawierać nagłówek H1");
         assertEquals(Msg.get("console.title"), title.get().getText());
-
-        Optional<Paragraph> desc = consoleView.getChildren()
-                                              .filter(Paragraph.class::isInstance)
-                                              .map(Paragraph.class::cast)
-                                              .findFirst();
-
-        assertTrue(desc.isPresent(), "Widok powinien zawierać paragraf z opisem");
-        assertEquals(Msg.get("console.description"), desc.get().getText());
     }
 
     @Test
     void shouldTriggerLogoutWhenLogoutButtonClicked() {
-        Button logoutButton = findButtonByText(Msg.get("app.navi.logout"));
-        assertNotNull(logoutButton, "Przycisk '"+Msg.get("app.navi.logout")+"' powinien istnieć");
+        SideNavItem logoutNavi = findNaviByText(Msg.get("app.navi.logout"));
+        assertNotNull(logoutNavi, "Przycisk '"+Msg.get("app.navi.logout")+"' powinien istnieć");
 
-        logoutButton.click();
+        Action.click(logoutNavi);
 
         verify(authenticationContext, times(1)).logout();
     }
 
     @Test
     void shouldHaveHomeButtonPresent() {
-        Button homeButton = findButtonByText(Msg.get("app.navi.main"));
-        assertNotNull(homeButton, "Przycisk '"+Msg.get("app.navi.main")+"' powinien istnieć");
+        SideNavItem homeNavi = findNaviByText(Msg.get("app.navi.main"));
+        assertNotNull(homeNavi, "Przycisk '"+Msg.get("app.navi.main")+"' powinien istnieć");
     }
 
-    private Button findButtonByText(String text) {
-        return consoleView.getChildren()
-                          .flatMap(component -> {
-                              if (component instanceof com.vaadin.flow.component.HasComponents) {
-                                  return ((com.vaadin.flow.component.HasComponents) component).getChildren();
-                              }
-                              return java.util.stream.Stream.of(component);
-                          })
-                             .filter(Button.class::isInstance)
-                             .map(Button.class::cast)
-                             .filter(b -> text.equals(b.getText()))
+    private SideNavItem findNaviByText(String text) {
+        return ComponentUtil.streamDescendants(consoleView)
+                             .filter(SideNavItem.class::isInstance)
+                             .map(SideNavItem.class::cast)
+                             .filter(b -> text.equals(b.getLabel()))
                              .findFirst()
                              .orElse(null);
     }
+
 
 }

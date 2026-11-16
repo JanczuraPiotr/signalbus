@@ -1,12 +1,12 @@
 package pl.signalbus.web.vaadin.console;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.sidenav.SideNav;
+import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -19,34 +19,43 @@ import pl.signalbus.security.UserRole;
 @Route("console")
 @RouteAlias("panel")
 @RolesAllowed(UserRole.CONSOLE)
-public class ConsoleView extends VerticalLayout implements HasDynamicTitle {
+public class ConsoleView extends AppLayout implements HasDynamicTitle {
+
+    private final AuthenticationContext authenticationContext;
 
     public ConsoleView(AuthenticationContext authenticationContext) {
+        this.authenticationContext = authenticationContext;
 
-        setSpacing(true);
-        setPadding(true);
-        setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
+        var toggle = new DrawerToggle();
+        var title = new H1(Msg.get("console.title"));
 
-        H2 title = new H2(Msg.get("console.title"));
-        Paragraph desc = new Paragraph(Msg.get("console.description"));
+        Scroller scroller = new Scroller(createSideNav());
+        scroller.setSizeFull();
+        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
 
-
-        Button homeButton = new Button(Msg.get("app.navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
-        Button logoutButton = new Button(Msg.get("app.navi.logout"), e -> authenticationContext.logout());
-        logoutButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-
-        HorizontalLayout actions = new HorizontalLayout(homeButton, logoutButton);
-        actions.setSpacing(true);
-
-        add(title, desc, actions);
-        addClassName("console-view");
+        addToDrawer(scroller);
+        addToNavbar(toggle, title);
     }
+
 
     @Override
     public String getPageTitle() {
         return Msg.get("app.navi.console") + " | " + Msg.get("app.title");
     }
 
+
+    private SideNav createSideNav() {
+
+        var nav = new SideNav();
+
+        var itemHome = new SideNavItem(Msg.get("app.navi.main"), "/");
+        itemHome.getElement(). addEventListener("click",  e -> UI.getCurrent().getPage().setLocation("/"));
+        nav.addItem(itemHome);
+
+        var itemLogout = new SideNavItem(Msg.get("app.navi.logout"));
+        itemLogout.getElement(). addEventListener("click",  e -> authenticationContext.logout());
+        nav.addItem(itemLogout);
+
+        return nav;
+    };
 }
