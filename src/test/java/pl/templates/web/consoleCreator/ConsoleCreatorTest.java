@@ -2,7 +2,6 @@ package pl.templates.web.consoleCreator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.signalbus.config.Msg;
@@ -13,6 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ConsoleCreatorTest extends ThymeleafTestBase {
+
+    ConsoleCreatorTest() {
+        super();
+    }
 
     @BeforeEach
     void setUp() {

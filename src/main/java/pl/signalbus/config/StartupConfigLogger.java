@@ -18,7 +18,7 @@ public class StartupConfigLogger {
 
     private final ServerProperties serverProperties;
 
-    private Environment env;
+    private final Environment env;
 
     public StartupConfigLogger(ServerProperties serverProperties, Environment env) {
         this.serverProperties = serverProperties;
