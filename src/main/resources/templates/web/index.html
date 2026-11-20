@@ -15,12 +15,12 @@
 <header layout:fragment="header-content">
     <nav>
         <a class="nav-item" th:href="@{/app/console}">
-            <span>[[#{app.navi.console}]]</span>
+            <span>[[#{navi.console}]]</span>
         </a>
         <a class="nav-item"
            th:href="@{/app/admin}"
            th:if="${isDev}">
-            <span>[[#{app.navi.admin}]]</span>
+            <span>[[#{navi.admin}]]</span>
         </a>
     </nav>
 </header>

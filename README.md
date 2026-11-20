@@ -54,7 +54,7 @@ Jeśli korzystasz z BrowserSync na porcie 3000, uruchamiaj jego proxy z opcją
 `--ws`, aby przekazywało również połączenia WebSocket panelu developerskiego:
 
 ```bash
-npx browser-sync start --proxy "http://localhost:8080" --ws --files "src/main/resources/message*.properties" "src/main/resources/static/**/*.css" "src/main/resources/templates/**/*.html" --port 3000 --no-open
+npx browser-sync start --proxy "http://localhost:8080" --ws --files "src/main/resources/message*.properties,src/main/resources/static/**/*.css,src/main/resources/templates/**/*.html,src/main/resources/content/**/*.md" --port 3000 --no-open
 ```
 
 Bez `--ws` widoki mogą działać poprawnie, ale połączenie

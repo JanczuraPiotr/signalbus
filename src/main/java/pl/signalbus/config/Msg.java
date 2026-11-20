@@ -1,6 +1,7 @@
 package pl.signalbus.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Profiles;
@@ -26,6 +27,7 @@ public class Msg {
     private final MessageSource messageSource;
     private final ResourceLoader resourceLoader;
     private final Map<String, String> fileCache = new ConcurrentHashMap<>();
+    private String contentSourceDirectory = "";
     private static volatile Msg instance = new StandardEnvironment().acceptsProfiles(Profiles.of("test"))
             ? new TestMsg() : new Msg();
 
@@ -48,6 +50,11 @@ public class Msg {
         return instance.resolveMessage(key, null);
     }
 
+    @Value("${signalbus.content.source-directory:}")
+    void setContentSourceDirectory(String contentSourceDirectory) {
+        this.contentSourceDirectory = contentSourceDirectory;
+    }
+
     public static String get(String key, Object... args) {
         return instance.resolveMessage(key, args);
     }
@@ -62,6 +69,13 @@ public class Msg {
     }
 
     private String resolveIfFile(String value) {
+        String contentPrefix = "classpath:content/";
+        if (value != null && value.startsWith(contentPrefix) && !contentSourceDirectory.isBlank()) {
+            String source = contentSourceDirectory + value.substring(contentPrefix.length());
+            if (resourceLoader.getResource(source).exists()) {
+                return readResourceContent(source);
+            }
+        }
         if (value != null && (value.startsWith("classpath:") || value.startsWith("file:"))) {
             return fileCache.computeIfAbsent(value, this::readResourceContent);
         }

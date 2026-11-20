@@ -6,26 +6,35 @@ import org.springframework.boot.ansi.AnsiColor;
 import org.springframework.boot.ansi.AnsiOutput;
 import pl.signalbus.config.Msg;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TodoTest {
 
     protected void todo(String message) {
         AnsiOutput.setEnabled(AnsiOutput.Enabled.ALWAYS);
         System.err.println(AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, message));
-        Assumptions.abort("TODO: " + message);
+
+        Assumptions.abort();
     }
 
     protected void todo(String message, String... reasons) {
         AnsiOutput.setEnabled(AnsiOutput.Enabled.ALWAYS);
-        System.err.println(AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, message));
 
-        if (reasons != null) {
-            int i = 1;
+        if (reasons != null && reasons.length > 0) {
+            List<Object> elements = new ArrayList<>();
+            elements.add(AnsiColor.BRIGHT_YELLOW);
+            elements.add(message);
             for (String reason : reasons) {
-                System.err.println(AnsiOutput.toString(AnsiColor.GREEN, "\t" + reason));
+                elements.add(AnsiColor.GREEN);
+                elements.add("\n\t" + reason);
             }
+            System.err.println(AnsiOutput.toString(elements.toArray()));
+        } else {
+            System.err.println(AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, message));
         }
 
-        Assumptions.abort("TODO: " + message);
+        Assumptions.abort();
     }
 
     @Test
@@ -173,6 +182,30 @@ public class TodoTest {
     @Test
     public void rules_magistrala_006() {
         todo("rules.magistrala.006", Msg.get("rules.magistrala.006"));
+    }
+
+    @Test
+    public void _20261120142217() {
+        todo("navi.console.monitoring.device");
+    }
+
+    @Test
+    public void _20261120142239() {
+        todo("navi.console.monitoring.magistrala");
+    }
+
+    @Test
+    public void _20261120142319() {
+        todo("navi.console.monitoring.variable");
+    }
+
+    @Test
+    public void _20261120160548() {
+        todo("Formularz ustawień",
+             "action.console.settings.save",
+             "action.console.settings.cancel",
+             "action.console.settings.export"
+        );
     }
 
 

@@ -37,8 +37,8 @@ public class CustomNotFoundView extends VerticalLayout implements HasErrorParame
         errorMessage = new Paragraph();
         errorMessage.getStyle().set("color", "#718096").set("font-size", "0.9rem");
 
-        Button homeButton = new Button(Msg.get("app.navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
-        Button panelButton = new Button(Msg.get("app.navi.back"), e -> UI.getCurrent().getPage().getHistory().back());
+        Button homeButton = new Button(Msg.get("navi.main"), e -> UI.getCurrent().getPage().setLocation("/"));
+        Button panelButton = new Button(Msg.get("navi.back"), e -> UI.getCurrent().getPage().getHistory().back());
         panelButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         HorizontalLayout actions = new HorizontalLayout(homeButton, panelButton);

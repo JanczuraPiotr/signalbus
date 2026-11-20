@@ -17,6 +17,13 @@ java {
     }
 }
 
+processResources {
+    from('src/main/resources/content') {
+        include '**/*.md'
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 repositories {
     mavenCentral()
 }
@@ -46,6 +53,8 @@ dependencies {
     testRuntimeOnly 'org.testcontainers:testcontainers-jdbc'
     testRuntimeOnly 'org.testcontainers:testcontainers-postgresql'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    testImplementation 'com.github.mvysny.kaributesting:karibu-testing-v24:2.7.3'
+
 }
 
 dependencyManagement {
@@ -66,9 +75,11 @@ tasks.named('test') {
     jvmArgs '--enable-native-access=ALL-UNNAMED', '-XX:+EnableDynamicAgentLoading', '-Xshare:off'
 
     outputs.upToDateWhen { false }
-    onOutput { descriptor, event ->
-        if (event.destination == org.gradle.api.tasks.testing.TestOutputEvent.Destination.StdErr) {
-            print event.message
+    if (providers.gradleProperty('testConsoleOutput').isPresent()) {
+        onOutput { descriptor, event ->
+            if (event.destination == org.gradle.api.tasks.testing.TestOutputEvent.Destination.StdErr) {
+                print event.message
+            }
         }
     }
 }
