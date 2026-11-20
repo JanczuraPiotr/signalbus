@@ -20,6 +20,15 @@ public class ThymeleafHomeTest extends ThymeleafTestBase {
     }
 
     @Test
+    void adminLinkIsVisibleInDevMode() {
+        context.setVariable("isDev", true);
+
+        Document doc = Jsoup.parse(templateEngine.process("web/index", context));
+
+        assertEquals(1, doc.select("header nav a[href=/app/admin]").size());
+    }
+
+    @Test
     void index_hp() {
 
         String html = templateEngine.process("web/index", context);

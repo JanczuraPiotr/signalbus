@@ -32,7 +32,7 @@ public class MagistralaView extends VerticalLayout implements ConsoleMenuProvide
     @Override
     public MenuBar createMenuBar() {
         MenuBar menu = new MenuBar();
-        menu.addItem(Msg.get("console.magistrala.add"), event -> Notification.show("Przykładowa akcja: dodaj magistralę"));
+        menu.addItem(Msg.get("action.console.magistrala.add"), event -> Notification.show("Przykładowa akcja: dodaj magistralę"));
         return menu;
     }
 }

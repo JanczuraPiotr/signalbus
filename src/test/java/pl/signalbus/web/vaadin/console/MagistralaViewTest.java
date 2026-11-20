@@ -31,7 +31,7 @@ class MagistralaViewTest {
         var navbar = magistralaView.createMenuBar().getItems();
         assertNotNull(navbar);
         assertEquals(1, navbar.size());
-        assertEquals(Msg.get("console.magistrala.add"), navbar.get(0).getText());
+        assertEquals(Msg.get("action.console.magistrala.add"), navbar.get(0).getText());
 
 
         Optional<H1> title = ComponentUtil.streamDescendants(magistralaView)

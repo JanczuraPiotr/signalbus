@@ -28,6 +28,18 @@ public class ThymeleafLoginTest extends ThymeleafTestBase {
         assertEquals(Msg.get("login.title"), doc.select("main .apla form h1").text());
         assertTrue(doc.select("main .apla form p").isEmpty());
         assertEquals(Msg.get("login.submit"), doc.select("main .apla form button[type=submit]").text());
+        assertEquals(1, doc.select("header nav a[href=/console-creator]").size());
+    }
+
+    @Test
+    void adminLoginDoesNotOfferConsoleCreation() {
+        context.setVariable("param", Map.of());
+        context.setVariable("adminLogin", true);
+
+        Document doc = Jsoup.parse(templateEngine.process("web/login", context));
+
+        assertEquals(0, doc.select("header nav a[href=/console-creator]").size());
+        assertEquals(1, doc.select("header nav a[href=/]").size());
     }
 
     @Test

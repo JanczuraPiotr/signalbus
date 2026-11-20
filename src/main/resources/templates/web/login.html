@@ -17,7 +17,7 @@
         <a class="nav-item" th:href="@{/}">
             <span>[[#{app.mainPage}]]</span>
         </a>
-        <a class="nav-item" th:href="@{/console-creator}">
+        <a class="nav-item" th:href="@{/console-creator}" th:unless="${adminLogin}">
             <span>[[#{navi.console.creator}]]</span>
         </a>
     </nav>
